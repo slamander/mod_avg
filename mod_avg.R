@@ -1,7 +1,7 @@
 mod_avg <- function(mods_set, 
                     model_type,
                     predict = FALSE, 
-                    delta_aic = 6, 
+                    delta_aic = Inf, 
                     aic_csv = FALSE, 
                     aic_rds = FALSE, 
                     preds_csv = FALSE, 
@@ -16,11 +16,11 @@ mod_avg <- function(mods_set,
   library(tidyverse)
   library(readr)
   library(MuMIn)
-
+  
   mods_names <- list()
   vec <- vector()
   output <- list()
-
+  
   for (i in 1:length(mods_set)){
     if (class(mods_set[[i]]) %in% c("lm","glm")){
       name <- mods_set[[i]]$call$formula
@@ -47,9 +47,9 @@ mod_avg <- function(mods_set,
           model.avg(
             subset(
               model.sel(mods_set),
-            delta < delta_aic)),
+              delta < delta_aic)),
           type="response")
-        }
+      }
       else{
         return(output)
       }
@@ -58,7 +58,7 @@ mod_avg <- function(mods_set,
         return(output[["aic_tab"]]) %>%
           as.data.frame() %>%
           write_csv("aic_tab.csv", append = append_file)
-        }
+      }
       if (aic_rds == TRUE) {
         return(output[["aic_tab"]]) %>%
           as.data.frame() %>%
@@ -79,7 +79,7 @@ mod_avg <- function(mods_set,
           write_rds("preds.rds", append = append_file)
       }
       else {
-          return(output)
+        return(output)
       }
     }
   }
