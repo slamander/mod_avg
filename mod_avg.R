@@ -39,7 +39,9 @@ mod_avg <- function(mods_set,
         unlist()
       output[["aic_tab"]] <- AICcmodavg::aictab(cand.set = mods_set,
                                                 modnames = mods_names,
-                                                method = "raw") 
+                                                method = "raw") %>%
+        subset(Delta_AICc < delta_aic)
+      
       if (predict == TRUE) {
         output[["model_preds"]] <- predict(
           model.avg(
