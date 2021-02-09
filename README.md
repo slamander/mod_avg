@@ -35,10 +35,12 @@ $ Cum.Wt     <dbl> 0.4743350, 0.8296337, 0.9980807, 0.9999781
 > mods1_output$model_preds %>% head()
          1          2          3          4          5          6 
 -0.6691745  0.2905654  0.3479291  0.6855289  0.4481183  0.7189391 
-If you get the chance to give it a try, I'm sure it's loaded with bugs--so let me know! 
 ```
 
 Currently I have a lot of items on the to do list to improve this function, but above all will be adding helpful error messages.. 
+
+
+If you get the chance to give it a try, I'm sure it's loaded with bugs--so let me know! 
 
 Best, 
 
