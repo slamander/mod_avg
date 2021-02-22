@@ -22,7 +22,7 @@ mod_avg <- function(mods_set,
   output <- list()
   
   for (i in 1:length(mods_set)){
-    if (class(mods_set[[i]]) %in% c("lm","glm")){
+    if (class(mods_set[[i]]) %in% c("lm","glm","glmmTMB")){
       name <- mods_set[[i]]$call$formula
       mods_names[[i]] <- paste(name[2],name[1],name[3]) 
     } 
