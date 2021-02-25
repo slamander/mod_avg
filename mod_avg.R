@@ -8,9 +8,9 @@ mod_avg <- function(mods_set,
                     preds_rds = FALSE, 
                     append_file = FALSE){
   
-  list.of.packages <- c("AICcmodavg", "tidyverse", "readr", "MuMIn")
-  new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-  if(length(new.packages)) install.packages(new.packages)
+  packages <- c("AICcmodavg", "tidyverse", "readr", "MuMIn")
+  new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+  if(length(new_packages)) install.packages(new_packages)
   
   library(AICcmodavg)
   library(tidyverse)
@@ -22,14 +22,17 @@ mod_avg <- function(mods_set,
   output <- list()
   
   for (i in 1:length(mods_set)){
-    if (class(mods_set[[i]]) %in% c("lm","glm","glmmTMB")){
+
+    if (class(mods_set[[i]]) %in% c("lm","glm","lmerMod","glmerMod","glmmTMB")){
       name <- mods_set[[i]]$call$formula
       mods_names[[i]] <- paste(name[2],name[1],name[3]) 
     } 
+    
     else (class(mods_set[[i]]) %in% c("lmerMod","glmerMod")) {
       name <- mods_set[[i]]@call$formula
-      mods_names[[i]] <- paste(name[2],name[1],name[3]) 
+      mods_names[[i]] <- paste(name[2],name[1],name[3])
     }
+    
     else {
       print("Alex hasn't coded for your model type yet... Email him and ask nicely")
     }
@@ -43,13 +46,13 @@ mod_avg <- function(mods_set,
         subset(Delta_AICc < delta_aic)
       
       if (predict == TRUE) {
-        output[["model_preds"]] <- predict(
-          model.avg(
-            subset(
-              model.sel(mods_set),
-              delta < delta_aic)),
-          type="response")
+        output[["model_preds"]] <- mods_set %>%
+          model.sel() %>%
+          subset(delta < delta_aic) %>%
+          MuMIn::model.avg() %>%
+          predict(type = "response")
       }
+      
       else{
         return(output)
       }
@@ -59,6 +62,7 @@ mod_avg <- function(mods_set,
           as.data.frame() %>%
           write_csv("aic_tab.csv", append = append_file)
       }
+      
       if (aic_rds == TRUE) {
         return(output[["aic_tab"]]) %>%
           as.data.frame() %>%
@@ -78,18 +82,11 @@ mod_avg <- function(mods_set,
           rename(preds = ".") %>%
           write_rds("preds.rds", append = append_file)
       }
+      
       else {
         return(output)
       }
     }
   }
 }
-
-
-
-
-
-
-
-
 
