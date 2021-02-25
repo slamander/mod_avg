@@ -26,7 +26,7 @@ mod_avg <- function(mods_set,
       name <- mods_set[[i]]$call$formula
       mods_names[[i]] <- paste(name[2],name[1],name[3]) 
     } 
-    if (class(mods_set[[i]]) %in% c("lmerMod","glmerMod")) {
+    else (class(mods_set[[i]]) %in% c("lmerMod","glmerMod")) {
       name <- mods_set[[i]]@call$formula
       mods_names[[i]] <- paste(name[2],name[1],name[3]) 
     }
