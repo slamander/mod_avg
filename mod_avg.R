@@ -89,4 +89,3 @@ mod_avg <- function(mods_set,
     }
   }
 }
-
