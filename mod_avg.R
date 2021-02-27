@@ -22,15 +22,15 @@ mod_avg <- function(mods_set,
   output <- list()
   
   for (i in 1:length(mods_set)){
-
-    if (class(mods_set[[i]]) %in% c("lm","glm","lmerMod","glmerMod","glmmTMB")){
+    
+    if (class(mods_set[[i]]) %in% c("lm","glm","glmmTMB","multinom","nnet")){
       name <- mods_set[[i]]$call$formula
-      mods_names[[i]] <- paste(name[2],name[1],name[3]) 
+      mods_names[[i]] <- paste(name[2], name[1], name[3]) 
     } 
     
-    else (class(mods_set[[i]]) %in% c("lmerMod","glmerMod")) {
+    if (class(mods_set[[i]]) %in% c("lmerMod","glmerMod")) {
       name <- mods_set[[i]]@call$formula
-      mods_names[[i]] <- paste(name[2],name[1],name[3])
+      mods_names[[i]] <- paste(name[2], "~", name[3])
     }
     
     else {
